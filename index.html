@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Graph Laplacian 在幾何、都市與醫療上的應用 | TWSIAM</title>
+    <title>Graph Laplacian Applications in Geometry, Urban Networks & MRI | TWSIAM</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -215,24 +215,23 @@
             margin-top: 5rem;
         }
 
-        
-@media (max-width: 768px) {
-    body{padding-top:120px;}
-    nav{padding:.6rem 0;}
-    nav ul{flex-wrap:wrap;gap:.8rem;justify-content:center;padding:0 10px;}
-    nav a{font-size:.85rem;}
-    header{padding:6rem 1rem 4rem;clip-path:none;}
-    header img{width:80vw !important;max-width:280px !important;height:auto !important;}
-    header h1{font-size:1.6rem;line-height:1.4;}
-    header p.subtitle{font-size:1rem;}
-    .container{padding:0 1rem;}
-    section{padding:2rem 1rem;}
-    .grid-2,.grid-3{grid-template-columns:1fr;}
-    table{display:block;overflow-x:auto;white-space:nowrap;font-size:.9rem;}
-    th,td{padding:.8rem;}
-    .math-box{overflow-x:auto;}
-}
-
+        /* 手機版本優化 */
+        @media (max-width: 768px) {
+            body { padding-top: 120px; }
+            nav { padding: .6rem 0; }
+            nav ul { flex-wrap: wrap; gap: .8rem; justify-content: center; padding: 0 10px; }
+            nav a { font-size: .85rem; }
+            header { padding: 6rem 1rem 4rem; clip-path: none; }
+            header img { width: 80vw !important; max-width: 280px !important; height: auto !important; }
+            header h1 { font-size: 1.6rem; line-height: 1.4; }
+            header p.subtitle { font-size: 1rem; }
+            .container { padding: 0 1rem; }
+            section { padding: 2rem 1rem; }
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            table { display: block; overflow-x: auto; white-space: nowrap; font-size: .9rem; }
+            th, td { padding: .8rem; }
+            .math-box { overflow-x: auto; } /* 確保長公式在手機上可左右滑動 */
+        }
     </style>
 </head>
 <body>
@@ -241,224 +240,223 @@
         <ul>
             <li><a href="#graLa">Graph Laplacian</a></li>
             <li><a href="#specCl">Spectral Clustering</a></li>
-            <li><a href="#feteg">Feature Extractiong</a></li>
-            <li><a href="#stnbun">應用一：Stanford Bunny</a></li>
-            <li><a href="#mrt">應用二：捷運票價分析</a></li>
-            <li><a href="#mri">應用三：腦瘤智慧分割</a></li>
+            <li><a href="#feteg">Feature Extraction</a></li>
+            <li><a href="#stnbun">App I: Stanford Bunny</a></li>
+            <li><a href="#mrt">App II: MRT Analysis</a></li>
+            <li><a href="#mri">App III: MRI Segmentation</a></li>
         </ul>
     </nav>
 
     <header>
-        <img src="ntnu_logo.png" alt="國立臺灣師範大學 Logo" style="height: 200px; margin-bottom: 30px;">
+        <img src="ntnu_logo.png" alt="National Taiwan Normal University Logo" style="height: 200px; margin-bottom: 30px;">
         
-        <h1>Graph Laplacian 與 Spectral Clustering<br>在幾何模型、都市網路與醫療影像上的應用</h1>
-        <p class="subtitle">打破線性分群限制，透過結構相似度、特徵提取工程與頻譜轉換，重新定義資料解析維度。</p>
+        <h1>Graph Laplacian & Spectral Clustering:<br>Applications in Geometric Models, Urban Networks, and Medical Imaging</h1>
+        <p class="subtitle">Breaking the boundaries of linear clustering through structural similarity, feature extraction engineering, and spectral transformation to redefine data analytics.</p>
 
         <div style="margin-top: 25px; background: rgba(255, 255, 255, 0.15); padding: 15px 40px; border-radius: 12px; display: inline-block; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2);">
-            <p style="margin: 5px 0; font-size: 1.25rem;"><strong>研究成員：</strong>文君豪、柯心宜</p>
-            <p style="margin: 5px 0; font-size: 1.1rem; color: #cbd5e1;"><strong>指導老師：</strong>謝世峰 教授</p>
+            <p style="margin: 5px 0; font-size: 1.25rem;"><strong>Authors:</strong> Chun-Hao, Wen ; Hsin-Yi, Ko</p>
+            <p style="margin: 5px 0; font-size: 1.1rem; color: #cbd5e1;"><strong>Advisor:</strong> Prof. Shih-Feng, Hsieh</p>
         </div>
     </header>
 
     <div class="container">
 
         <section id="graLa">
-            <h2>1. Graph Laplacian 簡介</h2>
-            <p>在機器學習領域中，現實資料的形狀大多為不單純的線性或圓形分布。如果直接使用傳統的 K-means 等分群方法，經常會受限於資料型態，導致分群結果不如預期。</p>
-            <p>為此，我們引入了 <strong>Graph-based（基於圖論）</strong> 的方法。其核心精神在於：<span class="highlight-text">捕捉資料內在的結構</span>，並利用結構建立「相似度」的概念。透過這套方法，我們可以讓越相似的資料點在圖論空間中被拉得越近，進而做出更合理的物理分群。</p>
+            <h2>1. Introduction to Graph Laplacian</h2>
+            <p>In the field of machine learning, real-world data rarely falls into simple linear or spherical distributions. If traditional clustering methods like K-means are applied directly, they often fail because they are constrained by the raw data type, leading to suboptimal clustering results.</p>
+            <p>To overcome this, we introduce <strong>Graph-based</strong> methodologies. The core philosophy is: <span class="highlight-text">capture the intrinsic structure of the data</span> and establish a concept of "similarity" based on that structure. Through this approach, similar data points are pulled closer together within the graph space, facilitating highly logical and physical clustering.</p>
 
-            <h3>建圖三要素：將資料轉化為圖結構</h3>
-            <p>要建構 Graph Laplacian，我們必須先利用特定的視角，將資料定義為一張圖形結構，這包含了三個重要元素：</p>
+            <h3>Three Pillars of Graph Construction</h3>
+            <p>To construct a Graph Laplacian, we must first map our data into a graph structure using a specific perspective. This involves three critical elements:</p>
             <ul>
-                <li><strong>節點 (Nodes)：</strong> 代表獨立的資料點（例如：3D 模型上的一個切面、一個捷運站，或是醫學影像中的一個超像素）。</li>
-                <li><strong>邊 (Edges)：</strong> 決定兩個節點之間「是否有關聯」（例如：空間上是否相鄰）。</li>
-                <li><strong>權重 (Weights)：</strong> 衡量兩個有關聯節點之間的「相似程度」。</li>
+                <li><strong>Nodes:</strong> Represent independent data points (e.g., a facet on a 3D model, an MRT station, or a superpixel in a medical image).</li>
+                <li><strong>Edges:</strong> Determine if there is a relationship between two nodes (e.g., spatial adjacency).</li>
+                <li><strong>Weights:</strong> Quantify the "degree of similarity" between two connected nodes.</li>
             </ul>
 
-            <h3>高斯相似度與拉普拉斯矩陣的誕生</h3>
-            <p>在權重計算上，我們採用了 <strong>高斯相似度 (Gaussian Similarity)</strong>。當兩個節點距離越接近、或特徵越相似時，公式計算出的權重就會越大：</p>
+            <h3>Gaussian Similarity & The Graph Laplacian</h3>
+            <p>To compute weights, we utilize <strong>Gaussian Similarity</strong>. The closer the distance or the more similar the features between two nodes, the larger the computed weight:</p>
             <div class="math-box">
                 \[ W_{i,j} = \exp\left(-\frac{||\mathbb{X}_i - \mathbb{X}_j||^2}{2\sigma^2}\right) \]
             </div>
             
-            <p>在得到相似度矩陣 \(W\) 後，我們計算每個節點與其他節點的相似度總和，形成一個對角矩陣——<strong>分支度矩陣 (Degree Matrix, \(D\))</strong>。最後，將分枝度矩陣減去相似度矩陣，即可得到一個對稱且半正定的 <strong>Laplacian 矩陣 (\(L\))</strong>：</p>
+            <p>Once we obtain the similarity matrix \(W\), we calculate the sum of similarities for each node to form a diagonal matrix known as the <strong>Degree Matrix (\(D\))</strong>. Finally, subtracting the similarity matrix from the degree matrix yields a symmetric, positive semi-definite <strong>Laplacian Matrix (\(L\))</strong>:</p>
             <div class="math-box">
                 \[ L = D - W \]
             </div>
-            <p>這個矩陣完美地濃縮了整份資料的幾何與結構特徵，也是我們下一步能夠順利進行「頻譜轉換」的最關鍵基礎。</p>
+            <p>This matrix perfectly encapsulates the geometric and structural features of the entire dataset, serving as the most crucial foundation for our subsequent "spectral transformation."</p>
         </section>
         
         <section id="specCl">
-            <h2>2. Spectral Clustering 簡介</h2>
-            <p>譜分群 (Spectral Clustering) 的概念其實非常直觀，可以把它想成是<strong>在尋找一種最完美的「空間轉換」與「分群方式」</strong>。它不直接在複雜的原始高維空間中進行硬切，而是透過剛剛建構的拉普拉斯矩陣，將資料映射到低維度的特徵空間中，讓原本交織在一起的非線性資料自然分離。</p>
+            <h2>2. Introduction to Spectral Clustering</h2>
+            <p>The concept of Spectral Clustering is highly intuitive. Think of it as <strong>searching for the perfect "spatial transformation" and "clustering mechanism."</strong> Instead of making hard cuts in a complex, high-dimensional raw space, it utilizes the Graph Laplacian to map data into a low-dimensional feature space, allowing entangled non-linear data to separate naturally.</p>
 
-            <h3>核心目標：最小化分群「成本」</h3>
-            <p>譜分群的核心任務，是尋找一個最佳的指標向量 \(v\)，讓以下的二次式達到最小化。我們可以把這個式子理解為分群時的<span class="highlight-text">「成本概念」</span>：</p>
+            <h3>Core Objective: Minimizing Clustering "Cost"</h3>
+            <p>The core task of spectral clustering is to find an optimal indicator vector \(v\) that minimizes the following quadratic form. We can conceptualize this equation as the <span class="highlight-text">"Cost Function"</span> of clustering:</p>
             <div class="math-box">
                 \[ v^T L v = \frac{1}{2}\sum_{i,j} w_{i,j}(v_i - v_j)^2 \]
             </div>
-            <p>在這裡，\(w_{i,j}\) 代表兩個資料點之間的相似度，而 \(v_i\) 與 \(v_j\) 則代表它們分群後的新位置：</p>
+            <p>Here, \(w_{i,j}\) represents the similarity between two data points, while \(v_i\) and \(v_j\) represent their new positions after clustering:</p>
             <ul>
-                <li>如果兩個資料點的相似度 \(w_{i,j}\) 非常高，但分群時卻把它們分得很開（導致 \((v_i - v_j)^2\) 很大），那麼整個系統的<strong>總成本就會暴增</strong>。</li>
-                <li>因此，最小化這個成本函數，實質上就是在<span class="highlight-text">鼓勵「相似度高（連結強）的資料點，必須被歸在同一群」</span>。</li>
+                <li>If two data points have a very high similarity \(w_{i,j}\) but are assigned far apart during clustering (causing \((v_i - v_j)^2\) to be large), the overall <strong>total cost of the system explodes</strong>.</li>
+                <li>Therefore, minimizing this cost function inherently <span class="highlight-text">encourages "highly similar (strongly connected) data points to be grouped into the same cluster."</span></li>
             </ul>
 
-            <h3>線性代數的解法：特徵向量的物理意義</h3>
-            <p>根據線性代數的性質，這個成本最佳化問題的解，剛好會來自拉普拉斯矩陣 \(L\) 的<strong>特徵向量 (Eigenvectors)</strong>。我們會將所有的特徵值由小到大進行排序，並進行深入的分析：</p>
+            <h3>Linear Algebra Solution: Physical Significance of Eigenvectors</h3>
+            <p>According to linear algebra, the solution to this cost optimization problem directly corresponds to the <strong>Eigenvectors</strong> of the Laplacian matrix \(L\). We sort all eigenvalues from smallest to largest and analyze them deeply:</p>
             <ul>
-                <li><strong>最小特徵值 \(\lambda_1 = 0\)：</strong> 由於拉普拉斯矩陣 \(L = D - W\) 的每一列總和剛好都是 0，因此最小的特徵值必定為 0，且其對應的特徵向量會是一個「全為 1」的向量。這代表所有資料點都被強行分在同一個群組裡，在實際分群上<strong>沒有任何物理意義</strong>。</li>
-                <li><strong>從第 2 個特徵向量開始使用：</strong> 為了得到有意義的分群結果，我們必須果斷捨棄第一個特徵向量，<span class="highlight-text">從第二小的特徵值（對應的特徵向量，即代數中的 Fiedler vector）開始使用</span>。我們可以根據這些特徵向量中數值的正負號、象限或相對位置，來精準判定資料的結構特徵。</li>
+                <li><strong>The smallest eigenvalue \(\lambda_1 = 0\):</strong> Because the sum of each row in \(L = D - W\) is exactly 0, the smallest eigenvalue is always 0, and its corresponding eigenvector is a vector of "all 1s". This mathematically implies forcing all data points into a single cluster, which <strong>holds no physical meaning</strong> for actual clustering.</li>
+                <li><strong>Utilizing eigenvectors from the 2nd onward:</strong> To achieve meaningful clustering, we discard the first eigenvector and <span class="highlight-text">begin utilizing the eigenvector corresponding to the second smallest eigenvalue (known as the Fiedler vector)</span>. We can accurately determine structural traits based on the signs (positive/negative), quadrants, or relative positions within these eigenvectors.</li>
             </ul>
 
-            <h3>低維空間映射與傳統 K-means 整合</h3>
-            <p>最後的分群步驟非常值觀：我們將挑選出的前 \(k\) 個特徵向量（例如第 2 到第 \(k+1\) 個）轉成行向量排成一個新的矩陣。此矩陣的<strong>第 \(i\) 列，就成為了第 \(i\) 筆資料在全新特徵空間中的低維新座標</strong>。最後，我們只需要在這個被高度優化、結構清晰的新座標系上，運行傳統的 <strong>K-means 演算法</strong>，就能完美完成非線性資料的分群任務！</p>
+            <h3>Low-Dimensional Mapping & K-means Integration</h3>
+            <p>The final clustering step is straightforward: we select the top \(k\) eigenvectors (e.g., the 2nd to the \((k+1)\)-th), arrange them as column vectors to form a new matrix. <strong>The \(i\)-th row of this matrix becomes the new, low-dimensional coordinate for the \(i\)-th data point</strong> in a completely new feature space. Finally, we simply run the traditional <strong>K-means algorithm</strong> on this highly optimized, structurally clear coordinate system to perfectly accomplish non-linear data clustering!</p>
         </section>
 
         <section id="feteg">
-            <h2>3. Feature Extraction 特徵提取工程</h2>
-            <p>傳統的演算法若直接套用於原始的龐大數據（如影像的所有像素、3D 模型的所有頂點），極易受雜訊干擾，且矩陣運算量會呈現幾何級數爆炸。本研究的突破關鍵，在於<span class="highlight-text">客製化特徵工程的取捨與優化</span>，我們針對不同的資料型態設計了專屬的特徵提取方案：</p>
+            <h2>3. Feature Extraction Engineering</h2>
+            <p>If traditional algorithms are applied directly to raw, massive datasets (like all pixels in an image or all vertices of a 3D model), they are highly susceptible to noise, and matrix computations will explode geometrically. The breakthrough in our research lies in <span class="highlight-text">customized feature engineering trade-offs and optimizations</span>. We designed exclusive feature extraction protocols for different data types:</p>
 
-            <h3>一、 物理單位的重新定義與降維</h3>
+            <h3>I. Redefining Physical Units & Dimensionality Reduction</h3>
             <ul>
-                <li><strong>醫療影像 (MRI) 的超像素降維：</strong> 一張 MRI 影像動輒數萬個像素，如果每個 pixel 都當作一個節點，矩陣運算將無法負荷。我們引入了 <strong>SLIC 演算法</strong>，將性質相近的像素聚集成約 400 個「超像素 (Superpixels)」。此舉不僅同質化了局部雜訊，更將矩陣複雜度大幅降維，奠定後續譜分析的基礎。</li>
-                <li><strong>3D 模型 (Stanford Bunny) 的 9D 特徵：</strong> 對於空間模型，我們將每個三角面轉換為 9 維的特徵向量，包含：<strong>內心座標 (x,y,z)</strong>、用於判斷模型相對象限位置的 <strong>PCA 投影內心座標 (x,y,z)</strong>，以及刻畫曲面起伏的 <strong>法向量 (x,y,z)</strong>。</li>
+                <li><strong>Superpixel Dimensionality Reduction for Medical Images (MRI):</strong> A single MRI slice easily contains tens of thousands of pixels. Treating each pixel as a node overloads matrix computations. We integrated the <strong>SLIC algorithm</strong> to aggregate similar pixels into roughly 400 "Superpixels". This not only homogenizes local noise but drastically reduces matrix complexity, laying the groundwork for subsequent spectral analysis.</li>
+                <li><strong>9D Feature Extraction for 3D Models (Stanford Bunny):</strong> For spatial models, we transform each triangular face into a 9-dimensional feature vector, including: <strong>Incenter Coordinates (x,y,z)</strong>, <strong>PCA-projected Incenter Coordinates (x,y,z)</strong> (to judge relative quadrant positioning), and the <strong>Normal Vector (x,y,z)</strong> to portray surface undulations.</li>
             </ul>
 
-            <h3>二、 排除梯度干擾的決策 (Gradient-Free Optimization)</h3>
-            <p>在實務分析腦瘤 MRI 時，我們發現大腦的正常生理結構（如腦溝、腦室）本身就具備極高的邊緣對比。如果盲目引入傳統影像處理常用的「邊緣梯度 (Gradient)」特徵，演算法反而會被這些正常組織的銳利邊緣嚴重誤導。</p>
-            <p>因此，我們做出了重要的工程決策：<span class="highlight-text">果斷捨棄梯度特徵</span>，完全由「亮度」與「區域變異數」來主導特徵空間，這讓我們能成功避開陷阱，專注捕捉腫瘤那種漸層、浸潤的模糊邊界。</p>
+            <h3>II. Gradient-Free Optimization for Medical Imaging</h3>
+            <p>During our practical MRI brain tumor analysis, we discovered that normal physiological structures in the brain (like sulci and ventricles) inherently possess extremely high edge contrast. If we blindly incorporate the "Gradient" features commonly used in traditional image processing, the algorithm gets severely misled by the sharp edges of normal healthy tissues.</p>
+            <p>Therefore, we made a crucial engineering decision: <span class="highlight-text">decisively discard gradient features</span>. By allowing the feature space to be entirely dominated by "Brightness" and "Regional Variance," we successfully bypassed structural traps, focusing entirely on capturing the blurred, infiltrative boundaries typical of tumors.</p>
 
-            <h3>三、 特徵標準化 (Normalization)</h3>
-            <p>由於我們提取的特徵包含了不同的物理意義與數值尺度（例如：空間座標的尺度與法向量的尺度完全不同），為了避免某個絕對數值過大的特徵在代入高斯相似度運算時「喧賓奪主」，我們在進入 Graph Laplacian 前，對所有特徵進行了嚴格的<strong>行標準化處理 (Row Normalization)</strong>。這確保了每一個維度的特徵都能公平且穩定地對最終的分群結果產生貢獻。</p>
+            <h3>III. Feature Normalization</h3>
+            <p>Because our extracted features contain varying physical meanings and numerical scales (e.g., the scale of spatial coordinates differs entirely from normal vectors), we applied strict <strong>Row Normalization</strong> to all features before they enter the Graph Laplacian. This prevents features with large absolute values from "dominating" the Gaussian similarity computation, ensuring that every dimensional feature contributes fairly and stably to the final clustering outcome.</p>
         </section>
 
         <section id="stnbun">
-            <h2>應用一：Stanford Bunny 3D 幾何模型分群</h2>
-            <p>為了驗證這套演算法在純幾何空間中的解析能力，我們引入了美國史丹佛大學於 1994 年推出的著名 3D 測試模型——<strong>Stanford Bunny</strong>。我們到手的原始數據非常單純，完全是 \(\mathbb{R}^3\) 空間中的點座標，其中包含了 3 萬多個頂點以及將近 7 萬個三角面。</p>
+            <h2>Application I: Stanford Bunny 3D Geometric Clustering</h2>
+            <p>To validate the algorithm's resolution capabilities in pure geometric space, we tested it on the famous 3D model introduced by Stanford University in 1994—the <strong>Stanford Bunny</strong>. The raw data we obtained was extremely rudimentary, consisting purely of point coordinates in \(\mathbb{R}^3\), encompassing over 30,000 vertices and nearly 70,000 triangular faces.</p>
 
             <div class="grid-2">
                 <div>
-                    <h3>一、 傳統歐式距離的盲點</h3>
-                    <p>直觀上來說，最簡單的分群方法是直接利用三角面的「內心座標」，並以傳統的<strong>歐式距離</strong>進行 K-means 分群。然而，從實測結果可以發現，這種做法<span class="highlight-text">非常不精準</span>（如圖三）， 原因是它完全忽略了曲面法向量所代表的空間幾何起伏與結構特徵。</p>
+                    <h3>I. The Blind Spot of Traditional Euclidean Distance</h3>
+                    <p>Intuitively, the simplest clustering approach is to use the "incenter coordinates" of the triangular faces and apply K-means clustering using traditional <strong>Euclidean distance</strong>. However, empirical results show that this approach is <span class="highlight-text">highly inaccurate</span> (as seen in Figure 3), because it completely ignores the spatial geometric undulations and structural features represented by surface normal vectors.</p>
                     
-                    <h3>二、 核心參數 \(\sigma\) 的幾何優化</h3>
-                    <p>如同在特徵工程中所述，我們改採 9D 特徵向量。而在高斯核（Gaussian Kernel）的分母參數 \(\sigma\) 上，我們也做出了調整。我們計算兩個面的單位法向量的「徑度差」，並取所有徑度差的平均數。為了避免負數或零的出現，我們再對該值與電腦最小精度 "eps" 取 "max()" ：</p>
+                    <h3>II. Geometric Optimization of Core Parameter \(\sigma\)</h3>
+                    <p>As described in our feature engineering section, we shifted to a 9D feature vector. Furthermore, we adjusted the denominator parameter \(\sigma\) in the Gaussian Kernel. We calculate the "radian difference" between unit normal vectors of two faces and take the average of all radian differences. To prevent negatives or zeros, we take the maximum between this value and the computer's minimum precision "eps":</p>
                     <div class="math-box">
-                        \[ \sigma = \max(\text{mean}(\text{徑度差}), \text{eps}) \]
+                        \[ \sigma = \max(\text{mean}(\text{Radian Difference}), \text{eps}) \]
                     </div>
-                    <p><strong>核心想法：</strong> 這個動態的 \(\sigma\) 定義了多遠的關係被視為「還有關係」。它一方面能過濾掉雜訊般微小的幾何連結，另一方面能<span class="highlight-text">將相似度之間的間隔有效放大</span>，使分群邊界更加清晰。</p>
+                    <p><strong>Core Concept:</strong> This dynamic \(\sigma\) defines how far apart a relationship can be while still being considered "connected." It filters out noise-like micro-geometric connections on one hand, and <span class="highlight-text">effectively amplifies the gap between similarities</span> on the other, making cluster boundaries significantly clearer.</p>
                 </div>
                 <figure>
-                    <img src="bunny_naive.png" alt="傳統歐式距離分群結果">
-                    <figcaption>▲ 圖三：單純以面內心做歐式距離分群，結果雜亂且不符合幾何結構</figcaption>
+                    <img src="bunny_naive.png" alt="Traditional Euclidean Distance Clustering Result">
+                    <figcaption>▲ Fig 3: Naive clustering via Euclidean distance on face incenters results in chaotic, geometrically incorrect boundaries.</figcaption>
                 </figure>
             </div>
 
-            <h3>三、 譜分群演算法結果展示</h3>
-            <p>當我們將資料轉移到拉普拉斯矩陣所建構的新特徵空間後，隨著我們使用的特徵向量數量增加，分群結果展現出極為驚人的精細度與幾何結構適應力：</p>
+            <h3>III. Spectral Clustering Results Showcase</h3>
+            <p>Once we transition the data into the new feature space constructed by the Laplacian matrix, the clustering results exhibit astonishing detail and geometric adaptability as we increase the number of eigenvectors used:</p>
 
             <div class="grid-3">
                 <figure>
-                    <img src="bunny_k2.png" alt="Stanford Bunny 分 2 群">
-                    <figcaption>▲ 圖四：分 2 群結果（切分大體幾何）</figcaption>
+                    <img src="bunny_k2.png" alt="Stanford Bunny 2 Clusters">
+                    <figcaption>▲ Fig 4: K=2 (Splits broad geometric mass)</figcaption>
                 </figure>
                 <figure>
-                    <img src="bunny_k5.png" alt="Stanford Bunny 分 5 群">
-                    <figcaption>▲ 圖五：分 5 群結果（辨識出身體與頭部）</figcaption>
+                    <img src="bunny_k5.png" alt="Stanford Bunny 5 Clusters">
+                    <figcaption>▲ Fig 5: K=5 (Distinguishes body from head)</figcaption>
                 </figure>
                 <figure>
-                    <img src="bunny_k12.png" alt="Stanford Bunny 分 12 群">
-                    <figcaption>▲ 圖六：分 12 群結果（耳朵、尾巴等細節被完美剝離）</figcaption>
+                    <img src="bunny_k12.png" alt="Stanford Bunny 12 Clusters">
+                    <figcaption>▲ Fig 6: K=12 (Ears, tail, and fine details are perfectly peeled apart)</figcaption>
                 </figure>
             </div>
-            <p style="margin-top: 1.5rem;"><strong>結論：</strong> 實驗證實，使用的特徵向量越多，分群結果就越細緻，也越能精準呈現出複雜物件的內在幾何形狀，成功突破了傳統線性分群的限制！</p>
+            <p style="margin-top: 1.5rem;"><strong>Conclusion:</strong> Experiments confirm that the more eigenvectors utilized, the finer the clustering results. It precisely renders the intrinsic geometric shapes of complex objects, successfully breaking the limitations of traditional linear clustering!</p>
         </section>
 
         <section id="mrt">
-            <h2>應用二：大台北捷運路網分群</h2>
-            <p>我們將 Graph Laplacian 應用於都市交通網路，並創新地以<span class="highlight-text">「票價」</span>作為兩站之間的 Edge 距離，透過 Gaussian Similarity 賦予權重（轉乘站自身距離設為 1）。</p>
+            <h2>Application II: Greater Taipei MRT Network Clustering</h2>
+            <p>We applied the Graph Laplacian to urban transportation networks, innovatively utilizing <span class="highlight-text">"Fare Price"</span> as the Edge distance between two stations, and assigning weights via Gaussian Similarity (with self-distance at transfer stations set to 1).</p>
 
             <div class="grid-2">
                 <figure>
-                    <img src="mrt_comparison.png" alt="票價 vs 歐式距離分群結果">
-                    <figcaption>▲ 左圖：票價分群 / 右圖：經緯度歐式距離分群</figcaption>
+                    <img src="mrt_comparison.png" alt="Fare vs Euclidean Distance Clustering Results">
+                    <figcaption>▲ Left: Clustering by Fare / Right: Clustering by Lat/Long Euclidean Distance</figcaption>
                 </figure>
                 <div>
-                    <h3>票價即距離，揭示都市結構轉移</h3>
-                    <p>比較發現，除非中心區域，票價與歐式距離的分群結果幾乎一致，證實票價是極佳的距離代理。更有趣的是，當分群數從 K=4 提升至 K=6 時，台北的三大核心（北車、信義、內湖）被清楚拆分為獨立區塊。</p>
-                    <p>原本強連結的大核心被切斷，這在成本函數上意味著「從這些次中心斷開是成本較低的選擇」。這用數學硬核地驗證了社會科學的理論：<strong>台北正從單核心邁向多核心城市</strong>。</p>
+                    <h3>Fare as Distance: Revealing Urban Structural Shifts</h3>
+                    <p>Comparisons reveal that, except for the central region, the clustering results of fare and Euclidean distance are nearly identical, proving fare is an excellent proxy for distance. More intriguingly, when we increase the cluster count from K=4 to K=6, Taipei's three main cores (Taipei Main Station, Xinyi, Neihu) are cleanly separated into independent blocks.</p>
+                    <p>The originally strong links of a massive core are severed. In terms of the cost function, this means "breaking off from these sub-centers is the lower-cost choice." This mathematically validates a hard social science theory: <strong>Taipei is transitioning from a monocentric to a polycentric city</strong>.</p>
                 </div>
             </div>
 
             <table>
                 <tr>
-                    <th>都市特性</th>
-                    <th>單核心城市 (Monocentric)</th>
-                    <th>多核心城市 (Polycentric)</th>
+                    <th>Urban Characteristic</th>
+                    <th>Monocentric City</th>
+                    <th>Polycentric City</th>
                 </tr>
                 <tr>
-                    <td><strong>都市結構</strong></td>
-                    <td>以單一 CBD (如早期北車) 為主，功能高度集中</td>
-                    <td>中心功能外溢，次中心 (信義/內科) 崛起替代核心</td>
+                    <td><strong>Urban Structure</strong></td>
+                    <td>Dominated by a single CBD (e.g., early Taipei Main Station), functions highly concentrated.</td>
+                    <td>Central functions spill over; sub-centers (Xinyi/Neihu) rise to replace the single core.</td>
                 </tr>
                 <tr>
-                    <td><strong>路網型態</strong></td>
-                    <td>單純放射狀，全往市中心集中</td>
-                    <td>放射 + 環狀 + 跨區連結，滿足去中心化需求</td>
+                    <td><strong>Network Topology</strong></td>
+                    <td>Purely radial, converging entirely towards the city center.</td>
+                    <td>Radial + Circular + Cross-district links, satisfying decentralized demands.</td>
                 </tr>
             </table>
         </section>
 
         <section id="mri">
-            <h2>應用三：腦瘤 MRI 智慧分割與形狀覺察</h2>
-            <p>在醫療影像中，動輒數萬個像素會導致計算量爆炸。我們導入 <strong>SLIC 超像素 (Superpixels)</strong> 演算法，將影像聚集成約 400 個區塊作為 Node，並以「空間相鄰」定義 Edge。</p>
+            <h2>Application III: Smart Segmentation of Brain Tumor MRIs</h2>
+            <p>In medical imaging, having tens of thousands of pixels causes computational explosions. We introduced the <strong>SLIC Superpixels</strong> algorithm to aggregate the image into roughly 400 blocks acting as Nodes, defining Edges by "spatial adjacency."</p>
 
-            <h3>亮度權重與極端案例測試</h3>
-            <p>我們將高斯權重結合「亮度」：相鄰區塊亮度越接近權重越大，邊界落差大則權重趨近零。這讓同一生理結構自然產生強連結。</p>
+            <h3>Brightness Weights & Extreme Case Testing</h3>
+            <p>We combined Gaussian weights with "Brightness": adjacent blocks with similar brightness yield higher weights, while large boundary disparities cause weights to approach zero. This naturally generates strong connections within the same physiological structures.</p>
 
             <div class="grid-2">
                 <figure>
-                    <img src="mri_simple.png" alt="簡單 MRI">
-                    <figcaption>▲ 案例一：簡單 MRI (有顯影劑)。設 3 群(不含背景)即成功剝離。</figcaption>
+                    <img src="mri_simple.png" alt="Simple MRI Segmentation">
+                    <figcaption>▲ Case 1: Simple MRI (with contrast). Setting 3 clusters (excluding background) successfully isolates the tumor.</figcaption>
                 </figure>
                 <figure>
-                    <img src="mri_complex.png" alt="複雜 MRI">
-                    <figcaption>▲ 案例二：複雜形狀 (有顯影劑)。設 8 群(不含背景)成功克服雜訊。</figcaption>
+                    <img src="mri_complex.png" alt="Complex MRI Segmentation">
+                    <figcaption>▲ Case 2: Complex shape (with contrast). Setting 8 clusters (excluding background) successfully overcomes noise.</figcaption>
                 </figure>
             </div>
 
-            <h3>特徵提取優化與改良成效</h3>
-            <p>現階段在我們改良過後，正式引入了先前介紹的客製化特徵提取功能。相較於原始方法需要設定高達 7 群（不含背景）才能將腦瘤與周圍複雜組織分離，經過特徵工程的深度優化後，演算法已具備優異的幾何與形狀覺察能力。</p>
-            <p>現在，我們<strong>僅需設定 2 群（不含背景，即直接切分為「腦瘤」與「非腦瘤」）</strong>，就能完美且精準地將腫瘤區域成功分離，大幅精簡了運算結構並提升診斷實用性。</p>
+            <h3>Feature Extraction Optimization & Improvement Efficacy</h3>
+            <p>In our current upgraded phase, we officially introduced the customized feature extraction functions discussed earlier. Previously, the raw method required setting up to 7 clusters (excluding background) to separate the brain tumor from surrounding complex tissues. After deep optimization via feature engineering, the algorithm now possesses outstanding geometric and shape awareness.</p>
+            <p>Currently, we <strong>only need to set 2 clusters (excluding background, directly bisecting into "Tumor" and "Non-Tumor")</strong> to perfectly and precisely isolate the tumor region, drastically streamlining the computational structure and enhancing diagnostic utility.</p>
             
-            <p>在這項突破中，<strong>「圓形度 (Circularity)」</strong>扮演了極為關鍵的角色。由於腦瘤（特別是惡性腫瘤）的生長往往呈現不規則、浸潤狀，邊緣崎嶇不平；相對地，部分正常腦部結構或因雜訊產生的亮塊，通常具有較平滑或狹長的幾何形狀。為了讓演算法具備「自動辨識形狀」的能力，我們引入了圓形度公式來量化這項特徵：</p>
+            <p>In this breakthrough, <strong>"Circularity"</strong> played an incredibly vital role. Because brain tumors (especially malignant ones) typically exhibit irregular, infiltrative growth with rugged edges, while certain normal brain structures or noise-induced bright spots usually have smoother or elongated geometries. To give the algorithm the ability to "automatically recognize shapes," we introduced the circularity formula to quantify this feature:</p>
 
             <div class="math-box">
-                \[ \text{圓形度 (Circularity)} = \frac{4\pi \times \text{面積 (Area)}}{\text{周長 (Perimeter)}^2} \]
+                \[ \text{Circularity} = \frac{4\pi \times \text{Area}}{\text{Perimeter}^2} \]
             </div>
 
-            <p>根據這個幾何學公式，當一個形狀越接近完美的圓形時，其圓形度會等於 1；反之，當形狀越狹長，或是邊緣越不規則（導致分母的周長急遽增加）時，圓形度的數值就會驟降並趨近於 0。我們將亮度與圓形度以 4:6 的比重結合，讓演算法不僅能看見「亮暗」，更能「感受形狀」，成功過濾掉高亮度但形狀狹長的非腫瘤組織（如血管或腦溝），精準鎖定真正的腫瘤區域。</p>
+            <p>According to this geometric formula, the closer a shape is to a perfect circle, the closer its circularity is to 1. Conversely, the more elongated the shape, or the more irregular its edges (causing the perimeter in the denominator to spike), the circularity value drops sharply toward 0. We combined Brightness and Circularity at a 4:6 ratio, enabling the algorithm to not only see "light and dark" but also "feel shapes." This successfully filters out high-brightness but elongated non-tumor tissues (like blood vessels or sulci), precisely locking onto the true tumor region.</p>
             
             <div class="grid-2">
                 <div>
-                    <p>未來我們計畫從 2D 擴展至 3D 影像，並加入更多紋理特徵或輕量化機器學習模型，讓這套基於 Graph Laplacian 的分割技術，能在實際臨床診斷上發揮巨大的輔助價值。</p>
+                    <p>In the future, we plan to expand from 2D to 3D imaging, incorporating more textural features or lightweight machine learning models, allowing this Graph Laplacian-based segmentation technology to deliver immense assistive value in actual clinical diagnostics.</p>
                 </div>
                 <figure>
-                    <img src="升級過後的.png" alt="加入形狀特徵的完美分割">
-                    <figcaption>▲ 導入形狀覺察與改良特徵後，僅需 2 群即可完美隔離出真正的腫瘤區域</figcaption>
+                    <img src="升級過後的.png" alt="Perfect Segmentation after Shape Features">
+                    <figcaption>▲ After introducing shape awareness and upgraded features, only 2 clusters are needed to perfectly isolate the true tumor region.</figcaption>
                 </figure>
             </div>
         </section>
 
     </div>
 
-   <footer style="background-color: #1e293b; color: white; text-align: center; padding: 4rem 2rem; margin-top: 5rem; border-top: 4px solid #3b82f6;">
+    <footer style="background-color: #1e293b; color: white; text-align: center; padding: 4rem 2rem; margin-top: 5rem; border-top: 4px solid #3b82f6;">
         <h2 style="color: white; justify-content: center; margin-bottom: 10px; font-size: 1.8rem; border: none;">
-            國立臺灣師範大學_數學系
-            <br>
-            <span style="font-size: 1.1rem; font-weight: 400; color: #94a3b8;">National Taiwan Normal University - Department of Mathematics</span>
+            National Taiwan Normal University<br>
+            <span style="font-size: 1.1rem; font-weight: 400; color: #94a3b8;">Department of Mathematics</span>
         </h2>
-        <p style="color: #cbd5e1; font-size: 1.1rem; margin-top: 20px;">基於特徵提取工程與 Graph Laplacian 之頻譜分析</p>
+        <p style="color: #cbd5e1; font-size: 1.1rem; margin-top: 20px;">Spectral Analysis based on Feature Extraction Engineering & Graph Laplacian</p>
     </footer>
 
 </body>
