@@ -28,7 +28,6 @@
             scroll-behavior: smooth;
         }
 
-        /* 導覽列 */
         nav {
             background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(10px);
@@ -38,15 +37,20 @@
             z-index: 1000;
             padding: 1rem 0;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;           
+            justify-content: center; 
         }
 
         nav ul {
             display: flex;
             justify-content: center;
+            align-items: center;    
+            text-align: center;      
             gap: 3rem;
             list-style: none;
             margin: 0;
             padding: 0;
+            width: 100%;
         }
 
         nav a {
@@ -82,7 +86,6 @@
             margin: 0 auto 3rem;
         }
 
-        /* 內容容器 */
         .container {
             max-width: 1100px;
             margin: -3rem auto 0;
@@ -91,7 +94,6 @@
             z-index: 10;
         }
 
-        /* 區塊卡片設計 */
         section {
             background: white;
             border-radius: 16px;
@@ -127,7 +129,6 @@
             padding-bottom: 0.5rem;
         }
 
-        /* 圖文並排與網格 */
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -143,7 +144,6 @@
             margin-top: 2rem;
         }
 
-        /* 圖片樣式 */
         figure {
             margin: 0;
             text-align: center;
@@ -168,7 +168,6 @@
             font-weight: 500;
         }
 
-        /* 數學與亮點區塊 */
         .math-box {
             background: var(--bg-light);
             border-left: 4px solid var(--secondary);
@@ -187,7 +186,6 @@
             font-weight: bold;
         }
 
-        /* 表格設計 */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -215,11 +213,10 @@
             margin-top: 5rem;
         }
 
-        /* 手機版本優化 */
         @media (max-width: 768px) {
             body { padding-top: 120px; }
             nav { padding: .6rem 0; }
-            nav ul { flex-wrap: wrap; gap: .8rem; justify-content: center; padding: 0 10px; }
+            nav ul { flex-wrap: wrap; gap: .8rem; justify-content: center; align-items: center; text-align: center; padding: 0 10px; }
             nav a { font-size: .85rem; }
             header { padding: 6rem 1rem 4rem; clip-path: none; }
             header img { width: 80vw !important; max-width: 280px !important; height: auto !important; }
@@ -230,7 +227,7 @@
             .grid-2, .grid-3 { grid-template-columns: 1fr; }
             table { display: block; overflow-x: auto; white-space: nowrap; font-size: .9rem; }
             th, td { padding: .8rem; }
-            .math-box { overflow-x: auto; } /* 確保長公式在手機上可左右滑動 */
+            .math-box { overflow-x: auto; } 
         }
     </style>
 </head>
