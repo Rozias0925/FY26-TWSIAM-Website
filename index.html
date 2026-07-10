@@ -171,11 +171,14 @@
         .math-box {
             background: var(--bg-light);
             border-left: 4px solid var(--secondary);
-            padding: 1.5rem;
+            padding: 1.5rem 1rem; /* 稍微縮小左右 padding 留出更多空間 */
             margin: 1.5rem 0;
             border-radius: 0 8px 8px 0;
             font-size: 1.1rem;
             text-align: center;
+            max-width: 100%;      /* 新增：絕對不允許超過父元素寬度 */
+            overflow-x: auto;     /* 新增：內容太長時允許局部水平滑動 */
+            box-sizing: border-box; /* 新增：確保 padding 不會額外增加寬度 */
         }
 
         .highlight-text {
@@ -214,20 +217,30 @@
         }
 
         @media (max-width: 768px) {
-            body { padding-top: 120px; }
-            nav { padding: .6rem 0; }
-            nav ul { flex-wrap: wrap; gap: .8rem; justify-content: center; align-items: center; text-align: center; padding: 0 10px; }
-            nav a { font-size: .85rem; }
-            header { padding: 6rem 1rem 4rem; clip-path: none; }
-            header img { width: 80vw !important; max-width: 280px !important; height: auto !important; }
-            header h1 { font-size: 1.6rem; line-height: 1.4; }
-            header p.subtitle { font-size: 1rem; }
-            .container { padding: 0 1rem; }
-            section { padding: 2rem 1rem; }
-            .grid-2, .grid-3 { grid-template-columns: 1fr; }
-            table { display: block; overflow-x: auto; white-space: nowrap; font-size: .9rem; }
-            th, td { padding: .8rem; }
-            .math-box { overflow-x: auto; } 
+            body, html {
+                overflow-x: hidden; 
+                max-width: 100vw;
+            }
+
+            body{padding-top:120px;}
+            nav{padding:.6rem 0;}
+            nav ul{flex-wrap:wrap;gap:.8rem;justify-content:center;align-items:center;text-align:center;padding:0 10px;}
+            nav a{font-size:.85rem;}
+            header{padding:6rem 1rem 4rem;clip-path:none;}
+            header img{width:80vw !important;max-width:280px !important;height:auto !important;}
+            header h1{font-size:1.6rem;line-height:1.4;}
+            header p.subtitle{font-size:1rem;}
+            .container{padding:0 1rem;}
+            
+            section{
+                padding:2rem 1.2rem;
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+            
+            .grid-2,.grid-3{grid-template-columns:1fr;}
+            table{display:block;overflow-x:auto;white-space:nowrap;font-size:.9rem;}
+            th,td{padding:.8rem;}
         }
     </style>
 </head>
@@ -345,7 +358,7 @@
                     <p><strong>Core Concept:</strong> This dynamic \(\sigma\) defines how far apart a relationship can be while still being considered "connected." It filters out noise-like micro-geometric connections on one hand, and <span class="highlight-text">effectively amplifies the gap between similarities</span> on the other, making cluster boundaries significantly clearer.</p>
                 </div>
                 <figure>
-                    <img src="bunny_naive.png" alt="Traditional Euclidean Distance Clustering Result" style="max-width: 100%; width: 250px; height: auto; margin: 0 auto; display: block;">
+                    <img src="bunny_naive.png" alt="Traditional Euclidean Distance Clustering Result">
                     <figcaption>▲ Fig 3: Naive clustering via Euclidean distance on face incenters results in chaotic, geometrically incorrect boundaries.</figcaption>
                 </figure>
             </div>
