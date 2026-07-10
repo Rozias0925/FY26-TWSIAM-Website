@@ -144,6 +144,11 @@
             margin-top: 2rem;
         }
 
+        .grid-2 > div, .grid-2 > figure, 
+        .grid-3 > div, .grid-3 > figure {
+            min-width: 0; 
+        }
+
         figure {
             margin: 0;
             text-align: center;
@@ -171,14 +176,16 @@
         .math-box {
             background: var(--bg-light);
             border-left: 4px solid var(--secondary);
-            padding: 1.5rem 1rem; /* 稍微縮小左右 padding 留出更多空間 */
+            padding: 1.5rem 1rem;
             margin: 1.5rem 0;
             border-radius: 0 8px 8px 0;
             font-size: 1.1rem;
             text-align: center;
-            max-width: 100%;      /* 新增：絕對不允許超過父元素寬度 */
-            overflow-x: auto;     /* 新增：內容太長時允許局部水平滑動 */
-            box-sizing: border-box; /* 新增：確保 padding 不會額外增加寬度 */
+            max-width: 100%;
+            overflow-x: auto;       /* 允許太長的公式產生左右捲軸 */
+            overflow-y: hidden;     /* 避免產生多餘的上下捲軸 */
+            box-sizing: border-box;
+            padding-bottom: 1.8rem; /* 稍微增加底部空間，避免捲軸蓋住公式 */
         }
 
         .highlight-text {
