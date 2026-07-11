@@ -64,6 +64,44 @@
 
         nav a:hover { color: var(--secondary); }
 
+/* 左側專屬 Icon (Logo) 設定 */
+        .nav-logo {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            z-index: 1001; /* 確保不被遮擋 */
+        }
+
+        /* 懸浮在右下角的個人 Icon (Logo) */
+        .nav-logo {
+            position: fixed; /* 關鍵魔法：固定在螢幕上 */
+            bottom: 30px;    /* 距離螢幕底部 30px */
+            right: 30px;     /* 距離螢幕右側 30px */
+            top: auto;       /* 清除之前的設定 */
+            left: auto;      /* 清除之前的設定 */
+            transform: none; /* 清除之前的設定 */
+            display: flex;
+            align-items: center;
+            z-index: 9999;   /* 數字開到最大，確保它永遠浮在最上層，不會被內容蓋住 */
+        }
+
+        .nav-logo img {
+            height: 55px;    /* 放在右下角可以稍微放大一點 */
+            width: 55px;
+            object-fit: cover;
+            border-radius: 50%;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15); /* 加上陰影，創造「浮在空中」的立體感 */
+            transition: all 0.3s ease;
+        }
+
+        .nav-logo:hover img {
+            transform: scale(1.1) translateY(-5px); /* 滑鼠游標靠近時，讓它稍微放大並往上浮 */
+            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+        }
+
         /* 標題區塊 */
         header {
             background: linear-gradient(135deg, var(--primary) 0%, #1e3a8a 100%);
@@ -476,6 +514,23 @@
         </h2>
         <p style="color: #cbd5e1; font-size: 1.1rem; margin-top: 20px;">Spectral Analysis based on Feature Extraction Engineering & Graph Laplacian</p>
     </footer>
+
+    <a href="#" class="nav-logo" id="back-to-top">
+        <img src="icon.png" alt="Rozias Icon">
+    </a>
+
+    <script>// --- 點擊右下角 Icon 絲滑回到頂端 ---
+            const backToTopBtn = document.getElementById('back-to-top');
+            if (backToTopBtn) {
+                backToTopBtn.addEventListener('click', function(e) {
+                    e.preventDefault(); // 阻止原本預設的跳轉，避免網址列多出 '#'
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth' // 觸發「刷～」的絲滑滑動效果
+                    });
+                });
+            }
+    </script>
 
 </body>
 </html>
